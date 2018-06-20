@@ -22,6 +22,15 @@ class Server:
 
 
     def handler(self, conn, addr):
-        pass
+        while True:
+            try:
+                data = conn.recv(1024)
+            except ConnectionResetError:
+                conn.close()
+                self.connections.remove(conn)
+                print(str(addr[0]) + ':' + str(addr[1]), 'disconnected')
+                break
+            else:
+                print(str(data, 'utf-8'))
 
 server = Server()
